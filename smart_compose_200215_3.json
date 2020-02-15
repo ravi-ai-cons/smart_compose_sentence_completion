@@ -1,0 +1,274 @@
+{
+    "class_name": "Model",
+    "config": {
+        "name": "model_2",
+        "layers": [
+            {
+                "name": "inf_decoder_inputs",
+                "class_name": "InputLayer",
+                "config": {
+                    "batch_input_shape": [
+                        null,
+                        null
+                    ],
+                    "dtype": "float32",
+                    "sparse": false,
+                    "ragged": false,
+                    "name": "inf_decoder_inputs"
+                },
+                "inbound_nodes": []
+            },
+            {
+                "name": "embedding_1",
+                "class_name": "Embedding",
+                "config": {
+                    "name": "embedding_1",
+                    "trainable": true,
+                    "batch_input_shape": [
+                        null,
+                        null
+                    ],
+                    "dtype": "float32",
+                    "input_dim": 28206,
+                    "output_dim": 300,
+                    "embeddings_initializer": {
+                        "class_name": "RandomUniform",
+                        "config": {
+                            "minval": -0.05,
+                            "maxval": 0.05,
+                            "seed": null,
+                            "dtype": "float32"
+                        }
+                    },
+                    "embeddings_regularizer": null,
+                    "activity_regularizer": null,
+                    "embeddings_constraint": null,
+                    "mask_zero": false,
+                    "input_length": null
+                },
+                "inbound_nodes": [
+                    [
+                        [
+                            "inf_decoder_inputs",
+                            0,
+                            0,
+                            {}
+                        ]
+                    ]
+                ]
+            },
+            {
+                "name": "state_input_h",
+                "class_name": "InputLayer",
+                "config": {
+                    "batch_input_shape": [
+                        null,
+                        256
+                    ],
+                    "dtype": "float32",
+                    "sparse": false,
+                    "ragged": false,
+                    "name": "state_input_h"
+                },
+                "inbound_nodes": []
+            },
+            {
+                "name": "state_input_c",
+                "class_name": "InputLayer",
+                "config": {
+                    "batch_input_shape": [
+                        null,
+                        256
+                    ],
+                    "dtype": "float32",
+                    "sparse": false,
+                    "ragged": false,
+                    "name": "state_input_c"
+                },
+                "inbound_nodes": []
+            },
+            {
+                "name": "cu_dnnlstm_1",
+                "class_name": "CuDNNLSTM",
+                "config": {
+                    "name": "cu_dnnlstm_1",
+                    "trainable": true,
+                    "dtype": "float32",
+                    "return_sequences": true,
+                    "return_state": true,
+                    "go_backwards": false,
+                    "stateful": false,
+                    "time_major": false,
+                    "units": 256,
+                    "kernel_initializer": {
+                        "class_name": "GlorotUniform",
+                        "config": {
+                            "seed": null,
+                            "dtype": "float32"
+                        }
+                    },
+                    "recurrent_initializer": {
+                        "class_name": "Orthogonal",
+                        "config": {
+                            "gain": 1.0,
+                            "seed": null,
+                            "dtype": "float32"
+                        }
+                    },
+                    "bias_initializer": {
+                        "class_name": "Zeros",
+                        "config": {
+                            "dtype": "float32"
+                        }
+                    },
+                    "unit_forget_bias": true,
+                    "kernel_regularizer": null,
+                    "recurrent_regularizer": null,
+                    "bias_regularizer": null,
+                    "activity_regularizer": null,
+                    "kernel_constraint": null,
+                    "recurrent_constraint": null,
+                    "bias_constraint": null
+                },
+                "inbound_nodes": [
+                    [
+                        [
+                            "embedding_1",
+                            0,
+                            0,
+                            {}
+                        ],
+                        [
+                            "state_input_h",
+                            0,
+                            0,
+                            {}
+                        ],
+                        [
+                            "state_input_c",
+                            0,
+                            0,
+                            {}
+                        ]
+                    ]
+                ]
+            },
+            {
+                "name": "dense",
+                "class_name": "Dense",
+                "config": {
+                    "name": "dense",
+                    "trainable": true,
+                    "dtype": "float32",
+                    "units": 128,
+                    "activation": "relu",
+                    "use_bias": true,
+                    "kernel_initializer": {
+                        "class_name": "GlorotUniform",
+                        "config": {
+                            "seed": null,
+                            "dtype": "float32"
+                        }
+                    },
+                    "bias_initializer": {
+                        "class_name": "Zeros",
+                        "config": {
+                            "dtype": "float32"
+                        }
+                    },
+                    "kernel_regularizer": null,
+                    "bias_regularizer": null,
+                    "activity_regularizer": null,
+                    "kernel_constraint": null,
+                    "bias_constraint": null
+                },
+                "inbound_nodes": [
+                    [
+                        [
+                            "cu_dnnlstm_1",
+                            0,
+                            0,
+                            {}
+                        ]
+                    ]
+                ]
+            },
+            {
+                "name": "dense_1",
+                "class_name": "Dense",
+                "config": {
+                    "name": "dense_1",
+                    "trainable": true,
+                    "dtype": "float32",
+                    "units": 28206,
+                    "activation": "softmax",
+                    "use_bias": true,
+                    "kernel_initializer": {
+                        "class_name": "GlorotUniform",
+                        "config": {
+                            "seed": null,
+                            "dtype": "float32"
+                        }
+                    },
+                    "bias_initializer": {
+                        "class_name": "Zeros",
+                        "config": {
+                            "dtype": "float32"
+                        }
+                    },
+                    "kernel_regularizer": null,
+                    "bias_regularizer": null,
+                    "activity_regularizer": null,
+                    "kernel_constraint": null,
+                    "bias_constraint": null
+                },
+                "inbound_nodes": [
+                    [
+                        [
+                            "dense",
+                            0,
+                            0,
+                            {}
+                        ]
+                    ]
+                ]
+            }
+        ],
+        "input_layers": [
+            [
+                "inf_decoder_inputs",
+                0,
+                0
+            ],
+            [
+                "state_input_h",
+                0,
+                0
+            ],
+            [
+                "state_input_c",
+                0,
+                0
+            ]
+        ],
+        "output_layers": [
+            [
+                "dense_1",
+                0,
+                0
+            ],
+            [
+                "cu_dnnlstm_1",
+                0,
+                1
+            ],
+            [
+                "cu_dnnlstm_1",
+                0,
+                2
+            ]
+        ]
+    },
+    "keras_version": "2.2.4-tf",
+    "backend": "tensorflow"
+}
